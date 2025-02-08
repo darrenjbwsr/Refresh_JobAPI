@@ -8,11 +8,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Job {
-  id        String  @id @default(uuid())
-  title     String
-  company   String
-  location  String
-  salary    Int?
-  postedAt  DateTime @default(now())
+model user {
+  id          Int       @id @default(autoincrement())
+  firstName   String
+  lastName    String
+  email       String    @unique
+  password    String
+  createdAt   DateTime  @default(now())
+}
+
+model job {
+  id          Int     @id @default(autoincrement())
+  title       String
+  company     String
+  location    String
+  salary      Int?
+  postedAt    DateTime @default(now())
 }

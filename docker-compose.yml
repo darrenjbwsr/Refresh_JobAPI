@@ -7,12 +7,13 @@ services:
       - postgres
     env_file:
       - .env
+
   postgres:
     image: postgres:15
     environment:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=secret
-      - POSTGRES_DB=job_board
+      - POSTGRES_DB=refresh_jobapi
     ports:
       - "5432:5432"
     volumes:

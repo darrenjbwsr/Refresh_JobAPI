@@ -22,6 +22,9 @@ model job {
   title       String
   company     String
   location    String
-  salary      Int?
-  postedAt    DateTime @default(now())
+  salary      String?
+  description String
+  timePosted  String?
+  link        String   @unique
+  created_at  DateTime @default(now())
 }

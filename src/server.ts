@@ -13,13 +13,12 @@ import { storeJobs, deleteOldJobs } from "./scrape";
 dotenv.config();
 const app = express();
 const prisma = new PrismaClient();
-
 app.use(cors());
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
 app.use('/auth', authRoutes);
-app.use("/", jobsRoutes)
+app.use('/job', jobsRoutes)
 
 app.get("/", (req, res) => {
     res.send("Refresh is running")
@@ -33,17 +32,26 @@ app.use(
         cookie: {secure: false}
     })
 )
-
-cron.schedule("0 23 * * *", async () => {
-    console.log("Running scheduled job scraping");
-    await deleteOldJobs();
-    await storeJobs();
-    console.log("Job refresh completed.");
-})
+const scrape = storeJobs()
+async () => {
+    try {
+        await scrape
+    } catch (err) {
+        console.error("failed", err)
+    }
+}
+//cron.schedule("*/40 * * * *", async () => {
+//    console.log("Running scheduled job scraping");
+  //  await deleteOldJobs();
+    //await storeJobs();
+    //console.log("Job refresh completed.");
+//})
 
 app.use(passport.initialize())
 app.use(passport.session())
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
+app.listen(PORT, () =>
+    console.log(`Server running on port ${PORT}`)
+)
 
 export default prisma
